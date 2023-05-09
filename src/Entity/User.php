@@ -22,11 +22,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+     /**
+     * @ORM\Column(type="string", length=25, unique=true)
+     * @Assert\NotBlank(message="Vous devez saisir un nom d'utilisateur.")
+     */
+    private $username;
+
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
 
     public function getId(): ?int
     {
