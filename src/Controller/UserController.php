@@ -27,7 +27,7 @@ class UserController extends AbstractController
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
-    #[Route('/users/create', name: 'user_create', methods: ['GET'])]
+    #[Route('/users/create', name: 'user_create')]
     public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
         $user = new User();
