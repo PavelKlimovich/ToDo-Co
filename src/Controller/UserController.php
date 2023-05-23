@@ -51,7 +51,7 @@ class UserController extends AbstractController
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('users/{user}/edit', name: 'user_edit', methods: ['GET'])]
+    #[Route('users/{user}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
         $form = $this->createForm(UserType::class, $user);

@@ -6,6 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
+    public static function setUpBefore(): void
+    {
+        exec('php bin/console doctrine:database:create --env=test');
+        exec('php bin/console doctrine:migrations:migrate --env=test --no-interaction');
+    }
+
     public function testIndex()
     {
         $client = static::createClient();

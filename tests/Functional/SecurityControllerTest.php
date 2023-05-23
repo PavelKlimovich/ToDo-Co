@@ -12,7 +12,7 @@ class SecurityControllerTest extends WebTestCase
         
         $crawler = $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('form[action="/login_check"]');
+        $this->assertSelectorExists('form[action="/login"]');
         $this->assertSelectorNotExists('.alert-danger');
     }
 }
