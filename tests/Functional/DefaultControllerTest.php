@@ -1,11 +1,17 @@
 <?php
 
-namespace Tests\AppBundle\Controller;
+namespace Tests\App\Functional;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
+    public static function setUpBefore(): void
+    {
+        exec('php bin/console doctrine:database:create --env=test');
+        exec('php bin/console doctrine:migrations:migrate --env=test --no-interaction');
+    }
+
     public function testIndex()
     {
         $client = static::createClient();
@@ -13,6 +19,6 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertSelectorTextContains('a', 'To Do List app');
     }
 }

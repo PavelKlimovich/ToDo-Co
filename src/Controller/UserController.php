@@ -27,7 +27,7 @@ class UserController extends AbstractController
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
-    #[Route('/users/create', name: 'user_create', methods: ['GET'])]
+    #[Route('/users/create', name: 'user_create')]
     public function createAction(Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
         $user = new User();
@@ -51,7 +51,7 @@ class UserController extends AbstractController
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route('users/{user}/edit', name: 'user_edit', methods: ['GET'])]
+    #[Route('users/{user}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
         $form = $this->createForm(UserType::class, $user);
