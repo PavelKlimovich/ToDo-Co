@@ -8,7 +8,9 @@ services:
         ports:
             - 8000:8090
         depends_on:
-            - mysql_    
+            - mysql_
+        extra_hosts:
+        - host.docker.internal:host-gateway    
 
     mysql_:
         image: mysql:8.0
