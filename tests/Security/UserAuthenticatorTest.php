@@ -42,11 +42,12 @@ class UserAuthenticatorTest extends TestCase
 
         $this->assertInstanceOf(Passport::class, $passport);
         $badges = $passport->getBadges();
-        $this->assertCount(2, $badges);
-        $this->assertInstanceOf(UserBadge::class, $badges[0]);
-        $this->assertInstanceOf(PasswordCredentials::class, $badges[1]);
-        $this->assertEquals('authenticate', $badges[0]->getKey());
-        $this->assertEquals('valid_token', $badges[0]->getValue());
+        $this->assertCount(3, $badges);
+        $this->assertInstanceOf(UserBadge::class, array_values($badges)[0]);
+        $this->assertInstanceOf(PasswordCredentials::class, array_values($badges)[1]);
+        $this->assertInstanceOf(CsrfTokenBadge::class, array_values($badges)[2]);
+        $this->assertEquals('test@example.com', array_values($badges)[0]->getUserIdentifier());
+        $this->assertEquals('valid_token', array_values($badges)[2]->getCsrfToken());
     }
 
     public function testOnAuthenticationSuccessWithTargetPath(): void
