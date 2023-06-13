@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Services\UserService;
 use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,8 +85,13 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
-    public function deleteTaskAction(Task $task)
+    public function deleteTaskAction(Task $task, UserService $userService)
     {
+        if (!$userService->taskAuthorisation($task)) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette tâche.');
+            return $this->redirectToRoute('task_list');
+        }
+
         $em = $this->doctrine->getManager();
         $em->remove($task);
         $em->flush();

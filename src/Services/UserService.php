@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
 
@@ -14,12 +15,22 @@ class UserService
         $this->security = $security;
     }
 
-    public function ifAuthorisation(User $user): bool
+    public function ifAuthorisation(): bool
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        dd($user);
-        if ($user?->getRoles() == '["ROLE_ADMIN"]') {
+        if ($user?->getRoles()[0] == "ROLE_ADMIN") {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function taskAuthorisation(Task $task): bool
+    {
+        /** @var User $user */
+        $user = $this->security->getUser();
+        if (($user?->getRoles()[0] == "ROLE_ADMIN" && $task->getUser() == null) || $task->getUser()?->getId() == $user?->getId()) {
             return true;
         }
 

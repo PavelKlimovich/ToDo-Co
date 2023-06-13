@@ -27,9 +27,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/users', name: 'user_list', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function listAction(UserRepository $userRepository)
     {
+        if (!$this->userService->ifAuthorisation()) {
+            return $this->redirectToRoute('homepage');
+        }
+
         return $this->render('user/list.html.twig', ['users' => $userRepository->findAll()]);
     }
 
@@ -51,20 +54,19 @@ class UserController extends AbstractController
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            if (!$this->userService->ifAuthorisation($user)) {
-                return $this->redirectToRoute('homepage');
-            }
-    
-            return $this->redirectToRoute('user_list');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
     #[Route('users/{user}/edit', name: 'user_edit')]
-    #[IsGranted('ROLE_ADMIN')]
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
+        if (!$this->userService->ifAuthorisation()) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);

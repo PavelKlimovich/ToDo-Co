@@ -35,8 +35,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, role: PUBLIC_ACCESS }
-        - { path: ^/users, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/users/create, role: PUBLIC_ACCESS }
+        - { path: ^/users, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/, role: PUBLIC_ACCESS }
         - { path: '^/users/{user}/edit', role: IS_AUTHENTICATED_FULLY }
 
