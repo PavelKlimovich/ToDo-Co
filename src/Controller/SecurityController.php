@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
         ));
     }
 
-    #[Route('/logout', name: 'logout', methods: ['POST'])]
+    #[Route('/logout', name: 'logout')]
     public function logoutCheck()
     {
         return $this->redirectToRoute('homepage');
