@@ -27,9 +27,7 @@ class TaskRepositoryTest extends TestCase
 
     public function testSave()
     {
-        //$this->repository->method('save')->willReturn(null);
         $task = new Task();
-        //$this->entityManager->expects($this->once())->method('persist')->with($task);
         $this->entityManager->expects($this->never())->method('flush');
 
         $this->repository->save($task);

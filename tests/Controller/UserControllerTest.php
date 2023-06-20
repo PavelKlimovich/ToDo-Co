@@ -2,6 +2,7 @@
 
 namespace Tests\App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
@@ -11,8 +12,7 @@ class UserControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/users');
 
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
+        $this->assertResponseRedirects('/login');
     }
 
     public function testCreateAction()
@@ -27,11 +27,12 @@ class UserControllerTest extends WebTestCase
             'user[email]'               => 'john@example.com',
             'user[password][first]'     => 'password123',
             'user[password][second]'    => 'password123',
+            'user[roles]'               => 'ROLE_ADMIN',
         ]);
 
         $client->submit($form);
 
-        $this->assertResponseRedirects('/users');
+        $this->assertResponseRedirects('/');
         $client->followRedirect();
 
         $this->assertResponseIsSuccessful();
@@ -41,7 +42,12 @@ class UserControllerTest extends WebTestCase
     public function testEditAction()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/users/1/edit');
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->find(2);
+        $client->loginUser($user);
+
+        $crawler = $client->request('GET', '/users/2/edit');
 
         $this->assertResponseIsSuccessful();
 
@@ -59,5 +65,19 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('.alert-success');
+    }
+
+    public function testListActionIfAuth()
+    {
+        $client = static::createClient();
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->find(2);
+        $client->loginUser($user);
+
+        $client->request('GET', '/users');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
     }
 }

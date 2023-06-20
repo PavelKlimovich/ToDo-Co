@@ -2,6 +2,8 @@
 
 namespace Tests\App\Controller;
 
+use App\Entity\User;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
@@ -67,10 +69,10 @@ class TaskControllerTest extends WebTestCase
         $this->assertSelectorTextContains('.alert-success', 'La tâche Tâche modifié a bien été marquée comme faite.');
 
     }
-
-    public function testDeleteTaskAction()
+    
+    public function testDeleteTaskActionAuth()
     {
-        $client = static::createClient();
+        $client = $this->addUser();
         $crawler = $client->request('GET', '/tasks');
         $form = $crawler->selectButton('Supprimer')->form();
         $client->submit($form);
@@ -79,4 +81,24 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a bien été supprimée.');
     }
+
+    public function addUser()
+    {
+        $client = static::createClient();
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+
+        $user = new User();
+        $user->setUsername('john_doe');
+        $user->setPassword('password');
+        $user->setEmail('john@example.fr');
+        $user->setRoles(["ROLE_ADMIN"]);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $client->loginUser($user);
+
+        return $client;
+
+    }
 }
+    

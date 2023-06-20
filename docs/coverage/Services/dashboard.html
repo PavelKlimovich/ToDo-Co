@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for E:\Lab\ToDo-Co\src\Security</title>
+  <title>Dashboard for E:\Lab\ToDo-Co\src\Services</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../_css/bootstrap.min.css?v=10.1.2" rel="stylesheet" type="text/css">
   <link href="../_css/nv.d3.min.css?v=10.1.2" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">E:\Lab\ToDo-Co\src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Security</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Services</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -58,6 +58,8 @@
         </tr>
        </thead>
        <tbody>
+       <tr><td><a href="TaskService.php.html#7">App\Services\TaskService</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#9">App\Services\UserService</a></td><td class="text-right">77%</td></tr>
 
        </tbody>
       </table>
@@ -74,6 +76,7 @@
         </tr>
        </thead>
        <tbody>
+       <tr><td><a href="UserService.php.html#9">App\Services\UserService</a></td><td class="text-right">7</td></tr>
 
        </tbody>
       </table>
@@ -111,6 +114,9 @@
         </tr>
        </thead>
        <tbody>
+       <tr><td><a href="TaskService.php.html#11"><abbr title="App\Services\TaskService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserService.php.html#18"><abbr title="App\Services\UserService::ifAuthorisation">ifAuthorisation</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="UserService.php.html#29"><abbr title="App\Services\UserService::taskAuthorisation">taskAuthorisation</abbr></a></td><td class="text-right">75%</td></tr>
 
        </tbody>
       </table>
@@ -127,6 +133,8 @@
         </tr>
        </thead>
        <tbody>
+       <tr><td><a href="UserService.php.html#29"><abbr title="App\Services\UserService::taskAuthorisation">taskAuthorisation</abbr></a></td><td class="text-right">4</td></tr>
+       <tr><td><a href="UserService.php.html#18"><abbr title="App\Services\UserService::ifAuthorisation">ifAuthorisation</abbr></a></td><td class="text-right">2</td></tr>
 
        </tbody>
       </table>
@@ -155,7 +163,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,1], "Class Coverage"))
+      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,1,0,0,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -173,7 +181,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,4], "Method Coverage"))
+      .datum(getCoverageDistributionData([1,0,0,0,0,0,0,0,2,0,0,1], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -223,7 +231,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[100,5,"<a href=\"UserAuthenticator.php.html#18\">App\\Security\\UserAuthenticator<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[0,1,"<a href=\"TaskService.php.html#7\">App\\Services\\TaskService<\/a>"],[77.77777777777779,7,"<a href=\"UserService.php.html#9\">App\\Services\\UserService<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -247,7 +255,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"UserAuthenticator.php.html#24\">App\\Security\\UserAuthenticator::__construct<\/a>"],[100,1,"<a href=\"UserAuthenticator.php.html#28\">App\\Security\\UserAuthenticator::authenticate<\/a>"],[100,2,"<a href=\"UserAuthenticator.php.html#42\">App\\Security\\UserAuthenticator::onAuthenticationSuccess<\/a>"],[100,1,"<a href=\"UserAuthenticator.php.html#51\">App\\Security\\UserAuthenticator::getLoginUrl<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([[0,1,"<a href=\"TaskService.php.html#11\">App\\Services\\TaskService::__construct<\/a>"],[100,1,"<a href=\"UserService.php.html#13\">App\\Services\\UserService::__construct<\/a>"],[75,2,"<a href=\"UserService.php.html#18\">App\\Services\\UserService::ifAuthorisation<\/a>"],[75,4,"<a href=\"UserService.php.html#29\">App\\Services\\UserService::taskAuthorisation<\/a>"]], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
