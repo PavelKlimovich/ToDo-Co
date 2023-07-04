@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
 use App\Services\UserService;
 use App\Repository\TaskRepository;
@@ -39,7 +40,9 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->doctrine->getManager();
-            $task->setUser($security->getUser() ?? null);
+            /** @var User $user */
+            $user = $security->getUser();
+            $task->setUser($user);
             $em->persist($task);
             $em->flush();
 
