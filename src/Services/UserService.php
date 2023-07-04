@@ -19,7 +19,8 @@ class UserService
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        if ($user?->getRoles()[0] == "ROLE_ADMIN") {
+
+        if ($user->getRoles()[0] == "ROLE_ADMIN") {
             return true;
         }
 
@@ -30,7 +31,8 @@ class UserService
     {
         /** @var User $user */
         $user = $this->security->getUser();
-        if (($user?->getRoles()[0] == "ROLE_ADMIN" && $task->getUser() == null) || $task->getUser()?->getId() == $user?->getId()) {
+
+        if (($user->getRoles()[0] == "ROLE_ADMIN" && $task->getUser() == null) || $task->getUser()->getId() == $user->getId()) {
             return true;
         }
 
