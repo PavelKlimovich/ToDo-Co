@@ -22,7 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    #[ORM\Column(type: 'string', length: 25, nullable: true,  unique: true)]
+    #[ORM\Column(type: 'string', length: 25, nullable: true, unique: true)]
     #[Assert\NotBlank(
         message: 'Le mot de passe doit avoir 8 caracteres minimux et avoir un caractere speciale.'
     )]

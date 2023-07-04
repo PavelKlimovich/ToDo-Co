@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Security;
 
 class UserService
 {
-    private Security $security; 
+    private Security $security;
 
-    public function __construct( Security $security)
+    public function __construct(Security $security)
     {
         $this->security = $security;
     }

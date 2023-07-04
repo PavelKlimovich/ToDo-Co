@@ -6,7 +6,6 @@ use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-
 class TaskControllerTest extends WebTestCase
 {
     public function testListAction()
@@ -32,7 +31,6 @@ class TaskControllerTest extends WebTestCase
         $client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a été bien été ajoutée.');
         $this->assertSelectorTextContains('.caption', 'Nouvelle tâche');
-
     }
 
     public function testEditAction()
@@ -47,17 +45,17 @@ class TaskControllerTest extends WebTestCase
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'Tâche modifié';
         $form['task[content]'] = 'Description modifiée';
-        
+
         $client->submit($form);
         $this->assertResponseRedirects('/tasks');
-        
+
         $client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a bien été modifiée.');
         $this->assertSelectorTextContains('.caption', 'Tâche modifié');
     }
 
     public function testToggleTaskAction()
-    {  
+    {
         $client = static::createClient();
         $crawler = $client->request('GET', '/tasks');
 
@@ -67,9 +65,8 @@ class TaskControllerTest extends WebTestCase
 
         $client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'La tâche Tâche modifié a bien été marquée comme faite.');
-
     }
-    
+
     public function testDeleteTaskActionAuth()
     {
         $client = $this->addUser();
@@ -98,7 +95,5 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($user);
 
         return $client;
-
     }
 }
-    

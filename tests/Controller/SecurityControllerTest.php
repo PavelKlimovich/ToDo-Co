@@ -9,7 +9,7 @@ class SecurityControllerTest extends WebTestCase
     public function testLoginAction()
     {
         $client = static::createClient();
-        
+
         $crawler = $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form[action="/login"]');

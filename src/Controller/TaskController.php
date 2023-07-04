@@ -15,14 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
-
     private $doctrine;
 
     public function __construct(ManagerRegistry $doctrine)
     {
         $this->doctrine = $doctrine;
     }
-    
+
     #[Route('/tasks', name: 'task_list', methods: ['GET'])]
     public function listAction(TaskRepository $taskRepository)
     {
