@@ -16,7 +16,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-
 class UserAuthenticatorTest extends TestCase
 {
     private UserAuthenticator $userAuthenticator;
@@ -55,7 +54,7 @@ class UserAuthenticatorTest extends TestCase
         $request = new Request();
         $request->setSession($this->session);
 
-        $targetPath = '/'; 
+        $targetPath = '/';
         $this->session->method('get')->willReturn($targetPath);
 
         $response = $this->userAuthenticator->onAuthenticationSuccess($request, $this->createMock(TokenInterface::class), 'main');
@@ -74,7 +73,7 @@ class UserAuthenticatorTest extends TestCase
         $this->urlGenerator->expects($this->once())
             ->method('generate')
             ->with('homepage')
-            ->willReturn('/'); 
+            ->willReturn('/');
 
         $response = $this->userAuthenticator->onAuthenticationSuccess($request, $token, $firewallName);
 
@@ -82,6 +81,3 @@ class UserAuthenticatorTest extends TestCase
         $this->assertEquals('/', $response->getTargetUrl());
     }
 }
-
-
-

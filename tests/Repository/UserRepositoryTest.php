@@ -30,7 +30,8 @@ class UserRepositoryTest extends KernelTestCase
         $user->setUsername('john_doe_brat');
         $user->setPassword('password');
         $user->setEmail('john_doe_brat.doe@example.com');
-        $user->setRoles(["ROLE_ADMIN"]);;
+        $user->setRoles(["ROLE_ADMIN"]);
+        ;
 
         $this->repository->save($user);
         $this->entityManager->clear();

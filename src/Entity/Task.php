@@ -5,9 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use App\Repository\TaskRepository;
-
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: '`task`')]
@@ -41,7 +39,7 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'task')]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
-    
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 

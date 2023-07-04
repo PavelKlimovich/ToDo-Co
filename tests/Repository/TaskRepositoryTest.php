@@ -17,13 +17,13 @@ class TaskRepositoryTest extends TestCase
     private $repository;
 
     protected function setUp(): void
-{
-    $this->entityManager = $this->createMock(EntityManager::class);
-    $this->managerRegistry = $this->createMock(ManagerRegistry::class);
-    $this->entityRepository = $this->createMock(EntityRepository::class);
-    
-    $this->repository = $this->createMock(TaskRepository::class);
-}
+    {
+        $this->entityManager = $this->createMock(EntityManager::class);
+        $this->managerRegistry = $this->createMock(ManagerRegistry::class);
+        $this->entityRepository = $this->createMock(EntityRepository::class);
+
+        $this->repository = $this->createMock(TaskRepository::class);
+    }
 
     public function testSave()
     {
@@ -33,4 +33,3 @@ class TaskRepositoryTest extends TestCase
         $this->repository->save($task);
     }
 }
-

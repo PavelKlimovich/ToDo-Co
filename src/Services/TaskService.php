@@ -6,7 +6,7 @@ use App\Repository\TaskRepository;
 
 class TaskService
 {
-    private TaskRepository $taskRepository; 
+    private TaskRepository $taskRepository;
 
     public function __construct(TaskRepository $taskRepository)
     {

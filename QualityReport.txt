@@ -1,0 +1,17 @@
+
+FILE: src\Services\UserService.php
+----------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 35 | WARNING | Line exceeds 120 characters; contains 128 characters
+----------------------------------------------------------------------
+
+
+FILE: tests\Security\UserAuthenticatorTest.php
+----------------------------------------------------------------------
+FOUND 0 ERRORS AND 1 WARNING AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 60 | WARNING | Line exceeds 120 characters; contains 130 characters
+----------------------------------------------------------------------
+
+
