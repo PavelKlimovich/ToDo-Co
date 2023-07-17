@@ -26,16 +26,4 @@ class UserService
 
         return false;
     }
-
-    public function taskAuthorisation(Task $task): bool
-    {
-        /** @var User $user */
-        $user = $this->security->getUser();
-
-        if (($user->getRoles()[0] == "ROLE_ADMIN" && $task->getUser() == null) || $task->getUser()->getId() == $user->getId()) {
-            return true;
-        }
-
-        return false;
-    }
 }

@@ -56,13 +56,12 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/edit', name: 'task_edit')]
     public function editAction(Task $task, Request $request)
     {
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);
         $form = $this->createForm(TaskType::class, $task);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->doctrine->getManager()->flush();
-
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
             return $this->redirectToRoute('task_list');
@@ -78,6 +77,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
     public function toggleTaskAction(Task $task)
     {
+        $this->denyAccessUnlessGranted('TASK_TOGGLE', $task);
         $task->toggle(!$task->isDone());
         $this->doctrine->getManager()->flush();
 
@@ -89,10 +89,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(Task $task, UserService $userService)
     {
-        if (!$userService->taskAuthorisation($task)) {
-            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette tâche.');
-            return $this->redirectToRoute('task_list');
-        }
+        $this->denyAccessUnlessGranted('TASK_DELETE', $task);
 
         $em = $this->doctrine->getManager();
         $em->remove($task);
