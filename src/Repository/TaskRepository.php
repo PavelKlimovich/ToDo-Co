@@ -38,4 +38,37 @@ class TaskRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Rerurn the list of tasks.
+     *
+     * @param string $type 
+     * @return array
+     */
+    public function findTaskList(string $type): array
+    {
+        $entityManager = $this->getEntityManager();
+        $isDone = '';
+
+        switch ($type) {
+            case 'ended':
+                $isDone = true;
+                break;
+            case 'progress':
+                $isDone = false;
+                break;
+            default:
+                return $this->findAll();
+                break;
+        }
+
+        $query = $entityManager->createQuery(
+            'SELECT t
+            FROM App\Entity\Task t
+            WHERE t.isDone = :isDone
+            ORDER BY t.createdAt ASC'
+        )->setParameter('isDone', $isDone);
+
+        return $query->getResult();
+    }
 }

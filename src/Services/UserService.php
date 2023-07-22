@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Security;
 

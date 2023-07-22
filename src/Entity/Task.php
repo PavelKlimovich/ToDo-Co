@@ -7,40 +7,56 @@ use Doctrine\DBAL\Types\Types;
 use App\Repository\TaskRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: TaskRepository::class)]
-#[ORM\Table(name: '`task`')]
+/**
+ * @ORM\Entity(repositoryClass=TaskRepository::class)
+ * @ORM\Table(name="`task`")
+ */
 class Task
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private int $id;
 
-    #[ORM\Column(length: 255, unique: true)]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 0,
-        minMessage: 'Vous devez saisir un titre.'
-    )]
+    /**
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 255,
+     *      minMessage = "Vous devez saisir un titre.",
+     *      maxMessage = "Le titre ne doit pas dépasser {{ limit }} caractères."
+     * )
+     */
     private string $title;
 
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        min: 0,
-        minMessage: 'Vous devez saisir du contenu.'
-    )]
+    /**
+     * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 1,
+     *      minMessage = "Vous devez saisir du contenu."
+     * )
+     */
     private string $content;
 
-    #[ORM\Column(type: "boolean")]
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private bool $isDone;
 
-    #[ORM\ManyToOne(inversedBy: 'task')]
-    #[ORM\JoinColumn(nullable: true)]
+    /**
+     * @ORM\ManyToOne(inversedBy="task")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private ?User $user = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    /**
+     * @ORM\Column(type=Types::DATETIME_MUTABLE)
+     */
     private ?\DateTimeInterface $createdAt = null;
 
     public function __construct()
