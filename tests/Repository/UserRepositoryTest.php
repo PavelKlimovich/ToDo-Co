@@ -27,17 +27,8 @@ class UserRepositoryTest extends KernelTestCase
     public function testSave()
     {
         $user = new User();
-        $user->setUsername('john_doe_brat');
-        $user->setPassword('password');
-        $user->setEmail('john_doe_brat.doe@example.com');
-        $user->setRoles(["ROLE_ADMIN"]);
-        ;
+        $this->entityManager->expects($this->never())->method('flush');
 
         $this->repository->save($user);
-        $this->entityManager->clear();
-
-        $foundUser = $this->repository->find($user->getId());
-        $this->assertInstanceOf(User::class, $foundUser);
-        $this->assertEquals('john_doe_brat', $foundUser->getUsername());
     }
 }

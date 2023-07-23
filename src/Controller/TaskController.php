@@ -69,12 +69,15 @@ class TaskController extends AbstractController
         $this->denyAccessUnlessGranted('TASK_EDIT', $task);
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
+        $type = $task->isDone() ? 'ended' : 'progress';
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->doctrine->getManager()->flush();
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('task_list', [
+                'type' => $type,
+            ]);
         }
 
         return $this->render('task/edit.html.twig', [
@@ -104,7 +107,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task, UserService $userService): Response
+    public function deleteTaskAction(Task $task): Response
     {
         $this->denyAccessUnlessGranted('TASK_DELETE', $task);
         $type = $task->isDone() ? 'ended' : 'progress';
