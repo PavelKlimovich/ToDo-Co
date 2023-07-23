@@ -3,65 +3,69 @@
 namespace Tests\App\Controller;
 
 use App\Entity\User;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
 {
+
+    private KernelBrowser|null $client = null;
+
+    public function setUp() : void
+    {
+        $this->client = static::createClient();
+    }
+
     public function testListAction()
     {
-        $client = static::createClient();
-        $client->request('GET', '/users');
-
+        $this->client->request('GET', '/users');
         $this->assertResponseRedirects('/login');
     }
 
     public function testCreateAction()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/users/create');
-
+        $crawler = $this->client->request('GET', '/users/create');
         $this->assertResponseIsSuccessful();
-
+        
         $form = $crawler->filter('form[name=user]')->form([
             'user[username]'            => 'John Doe',
             'user[email]'               => 'john@example.com',
-            'user[password][first]'     => 'password123',
-            'user[password][second]'    => 'password123',
+            'user[password][first]'     => '$2y$04$feLHYwU5ZHIgP4B1Gkgd1efJCLpwXbjrimvIuSipb9M/Y6nt2RVeq',
+            'user[password][second]'    => '$2y$04$feLHYwU5ZHIgP4B1Gkgd1efJCLpwXbjrimvIuSipb9M/Y6nt2RVeq',
             'user[roles]'               => 'ROLE_ADMIN',
         ]);
 
-        $client->submit($form);
-
+        $this->client->submit($form);
+        
         $this->assertResponseRedirects('/');
-        $client->followRedirect();
-
+        $this->client->followRedirect();
+        
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('.alert-success');
     }
 
     public function testEditAction()
     {
-        $client = static::createClient();
-        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->client->getContainer()->get('doctrine')->getManager();
         $userRepository = $entityManager->getRepository(User::class);
-        $user = $userRepository->find(2);
-        $client->loginUser($user);
+        $user = $userRepository->findOneByEmail('john@example.com');
+        $this->client->loginUser($user);
 
-        $crawler = $client->request('GET', '/users/2/edit');
+        $crawler = $this->client->request('GET', '/users/'.$user->getId().'/edit');
 
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->filter('form[name=user]')->form([
             'user[username]'            => 'Updated Name',
             'user[email]'               => 'updated@example.com',
-            'user[password][first]'     => 'newpassword',
-            'user[password][second]'    => 'newpassword',
+            'user[password][first]'     => '$2y$04$feLHYwU5ZHIgP4B1Gkgd1efJCLpwXbjrimvIuSipb9M/Y6nt2RVeq',
+            'user[password][second]'    => '$2y$04$feLHYwU5ZHIgP4B1Gkgd1efJCLpwXbjrimvIuSipb9M/Y6nt2RVeq',
         ]);
 
-        $client->submit($form);
+        $this->client->submit($form);
 
         $this->assertResponseRedirects('/users');
-        $client->followRedirect();
+        $this->client->followRedirect();
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('.alert-success');
@@ -69,13 +73,12 @@ class UserControllerTest extends WebTestCase
 
     public function testListActionIfAuth()
     {
-        $client = static::createClient();
-        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->client->getContainer()->get('doctrine')->getManager();
         $userRepository = $entityManager->getRepository(User::class);
-        $user = $userRepository->find(2);
-        $client->loginUser($user);
+        $user = $userRepository->findOneByEmail('updated@example.com');
+        $this->client->loginUser($user);
 
-        $client->request('GET', '/users');
+        $this->client->request('GET', '/users');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
