@@ -8,81 +8,87 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TaskControllerTest extends WebTestCase
 {
+    public $user;
+    private KernelBrowser|null $client = null;
+
+    public function setUp() : void
+    {
+        $this->client = static::createClient();
+    }
     public function testListAction()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/tasks');
+        $crawler = $this->client->request('GET', '/tasks/list/all');
         $this->assertResponseIsSuccessful();
     }
 
     public function testCreateAction()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/tasks/create');
+        $this->addUser();
+        $this->client->loginUser($this->getUser());
+        $crawler = $this->client->request('GET', '/tasks/create');
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Ajouter')->form();
         $form['task[title]'] = 'Nouvelle tâche';
         $form['task[content]'] = 'Description de la nouvelle tâche';
 
-        $client->submit($form);
-        $this->assertResponseRedirects('/tasks');
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/tasks/list/progress');
 
-        $client->followRedirect();
+        $this->client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a été bien été ajoutée.');
         $this->assertSelectorTextContains('.caption', 'Nouvelle tâche');
     }
 
     public function testEditAction()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/tasks');
+        $this->client->loginUser($this->getUser());
+        $crawler = $this->client->request('GET', '/tasks/list/progress');
 
         $link = $crawler->selectLink('Nouvelle tâche')->link();
-        $crawler = $client->click($link);
+        $crawler = $this->client->click($link);
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Modifier')->form();
         $form['task[title]'] = 'Tâche modifié';
         $form['task[content]'] = 'Description modifiée';
 
-        $client->submit($form);
-        $this->assertResponseRedirects('/tasks');
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/tasks/list/progress');
 
-        $client->followRedirect();
+        $this->client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a bien été modifiée.');
         $this->assertSelectorTextContains('.caption', 'Tâche modifié');
     }
 
     public function testToggleTaskAction()
     {
-        $client = static::createClient();
-        $crawler = $client->request('GET', '/tasks');
+        $this->client->loginUser($this->getUser());
+        $crawler = $this->client->request('GET', '/tasks/list/progress');
 
         $form = $crawler->selectButton('Marquer comme faite')->form();
-        $crawler = $client->click($form);
-        $this->assertResponseRedirects('/tasks');
+        $crawler = $this->client->click($form);
+        $this->assertResponseRedirects('/tasks/list/ended');
 
-        $client->followRedirect();
-        $this->assertSelectorTextContains('.alert-success', 'La tâche Tâche modifié a bien été marquée comme faite.');
+        $this->client->followRedirect();
+        $this->assertSelectorTextContains('.alert-success', 'La tâche Tâche modifié a bien été marquée faite.');
     }
 
     public function testDeleteTaskActionAuth()
     {
-        $client = $this->addUser();
-        $crawler = $client->request('GET', '/tasks');
+        $this->client->loginUser($this->getUser());
+        $crawler = $this->client->request('GET', '/tasks/list/ended');
         $form = $crawler->selectButton('Supprimer')->form();
-        $client->submit($form);
-        $this->assertResponseRedirects('/tasks');
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/tasks/list/ended');
 
-        $client->followRedirect();
+        $this->client->followRedirect();
         $this->assertSelectorTextContains('.alert-success', 'Superbe ! La tâche a bien été supprimée.');
     }
 
     public function addUser()
     {
-        $client = static::createClient();
-        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $entityManager = $this->client->getContainer()->get('doctrine')->getManager();
 
         $user = new User();
         $user->setUsername('john_doe');
@@ -92,8 +98,14 @@ class TaskControllerTest extends WebTestCase
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $client->loginUser($user);
+        $this->user = $user;
+    }
 
-        return $client;
+    public function getUser()
+    {
+        $userRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(User::class);
+        $user = $userRepository->findOneByEmail('john@example.fr');
+
+        return $user;
     }
 }
