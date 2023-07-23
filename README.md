@@ -13,7 +13,7 @@
 
 1. Clone project with `git clone https://github.com/PavelKlimovich/ToDo-Co.git
 2. Install dependencies with `cd ToDo-Co && composer install`
-3. Rename `.env.local` to `.env` and fill up your database configuration
+3. In`.env` fill up your database configuration
 example config in MYSQL: `DATABASE_URL: `DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7.34&charset=utf8"`
 4. Create database with: `php bin/console doctrine:database:create` (or with symfony Client: `symfony console doctrine:database:create`)
 5. Create schema on database with: `php bin/console doctrine:migrations:migrate -n`

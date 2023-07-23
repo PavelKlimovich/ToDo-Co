@@ -43,9 +43,9 @@ class TaskRepository extends ServiceEntityRepository
      * Rerurn the list of tasks.
      *
      * @param string $type 
-     * @return array
+     * @return mixed
      */
-    public function findTaskList(string $type): array
+    public function findTaskList(string $type): mixed
     {
         $entityManager = $this->getEntityManager();
         $isDone = '';
@@ -59,7 +59,6 @@ class TaskRepository extends ServiceEntityRepository
                 break;
             default:
                 return $this->findAll();
-                break;
         }
 
         $query = $entityManager->createQuery(

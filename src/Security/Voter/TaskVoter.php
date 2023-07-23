@@ -15,13 +15,6 @@ class TaskVoter extends Voter
     public const DELETE = 'TASK_DELETE';
 
 
-    private $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
-
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::EDIT, self::TOGGLE, self::DELETE]) && $subject instanceof \App\Entity\Task;
@@ -38,13 +31,10 @@ class TaskVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
                 return $this->canEdit($subject, $user);
-                break;
             case self::TOGGLE:
                 return $this->canToggle($subject, $user);
-                break;
             case self::DELETE:
                 return $this->canDelete($subject, $user);
-                break;
         }
 
         return false;

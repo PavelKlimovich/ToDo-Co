@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
-    private $doctrine;
+    private ManagerRegistry $doctrine;
 
     public function __construct(ManagerRegistry $doctrine)
     {
@@ -46,7 +46,9 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->doctrine->getManager();
-            $task->setUser($this->getUser());
+             /** @var User $user */
+            $user = $this->getUser();
+            $task->setUser($user);
             $em->persist($task);
             $em->flush();
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');

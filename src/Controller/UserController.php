@@ -15,8 +15,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
-    private $doctrine;
-    private $userService;
+    private ManagerRegistry $doctrine;
+    private UserService $userService;
 
     public function __construct(ManagerRegistry $doctrine, UserService $userService)
     {

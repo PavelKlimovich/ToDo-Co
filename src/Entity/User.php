@@ -40,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $email;
 
     /**
+     * @var array<mixed> $roles
      * @ORM\Column(type="json")
      */
     private array $roles = [];
@@ -53,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="user", orphanRemoval=true)
      */
-    private $tasks;
+    private mixed $tasks;
 
     /**
      * @ORM\Column(type="string")
@@ -66,12 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tasks = new ArrayCollection();
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername($username): self
+    public function setUsername(string $username): self
     {
         $this->username = $username;
         
@@ -81,6 +82,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -113,6 +121,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->roles;
     }
 
+    /**
+     * @param array<mixed> $roles
+     * @return self
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -157,16 +169,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSalt()
+    public function getSalt(): null|string
     {
-        // Vous pouvez renvoyer une valeur ici si vous utilisez une méthode spécifique pour saler le mot de passe, ou simplement retourner null.
         return null;
     }
 
      /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 }
