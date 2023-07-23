@@ -9,6 +9,9 @@
 
 <hr>
 
+## Qualité de code
+
+[Comment_contribuer_au_projet](comment_contribuer_au_projet.md)
 ## Installation and configuration
 
 1. Clone project with `git clone https://github.com/PavelKlimovich/ToDo-Co.git
